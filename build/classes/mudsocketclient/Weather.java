@@ -15,10 +15,8 @@ public class Weather {
     public static void main(String[] args) throws UnknownHostException, IOException {
         String host = "rainmaker.wunderground.com";
         int port = 3000;
-        int c;
-        InputOutput io = new InputOutput();
-        int intVal;
-        char ch;
+        int byteOfDataAsInt;
+        char charFromByteOfData;
         StringBuilder sb = null;
         {
             try (Socket socket = new Socket(host, port);
@@ -26,13 +24,9 @@ public class Weather {
                     OutputStream ouputStream = socket.getOutputStream();
                     PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
                     final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
-                while ((intVal = inputStream.read()) != -1) {
-                    ch = (char) intVal;
-                    out.print(ch);
-                   // sb.append(ch);
-                    if (intVal == 13) {
-                        sb = new StringBuilder();
-                    }
+                while ((byteOfDataAsInt = inputStream.read()) != -1) {
+                    charFromByteOfData = (char) byteOfDataAsInt;
+                    out.print(charFromByteOfData);
                 }
             }
         }
