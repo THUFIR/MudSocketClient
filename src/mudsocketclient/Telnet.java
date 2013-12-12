@@ -10,14 +10,13 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import static java.lang.System.out;
 
-public class Weather {
+public class Telnet {
 
     public static void main(String[] args) throws UnknownHostException, IOException {
         final String host = "rainmaker.wunderground.com";
         final int port = 3000;
         {
-            //also, a thread for reading from stdin
-            Thread remoteOutputStream = new Thread() {
+            Thread remoteConnection = new Thread() {
 
                 @Override
                 public void run() {
@@ -27,7 +26,7 @@ public class Weather {
                             OutputStream ouputStream = socket.getOutputStream();
                             PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
                             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
-                        while ((byteOfData = inputStream.read()) != -1) {  //put into thread
+                        while ((byteOfData = inputStream.read()) != -1) {
                             out.print((char) byteOfData);
                         }
                     } catch (Exception e) {
@@ -35,7 +34,7 @@ public class Weather {
                     }
                 }
             };
-            remoteOutputStream.start();
+            remoteConnection.start();
         }
     }
 }
