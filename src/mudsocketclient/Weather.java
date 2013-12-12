@@ -1,6 +1,5 @@
 package mudsocketclient;
 
-import static java.lang.System.out;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -9,6 +8,8 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import static java.lang.System.out;
+
 
 public class Weather {
 
@@ -16,27 +17,26 @@ public class Weather {
         String host = "rainmaker.wunderground.com";
         int port = 3000;
         int byteOfData;
-
-        char charFromByteOfData;
         {
             try (Socket socket = new Socket(host, port);
                     InputStream inputStream = socket.getInputStream();
                     OutputStream ouputStream = socket.getOutputStream();
                     PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
                     final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
-                Thread readInput = new Thread() {
-
+                //also, a thread for reading from stdin
+                Thread remoteOutputStream = new Thread() {
                     @Override
                     public void run() {
-                        out.println("hi");
+                        //while loop should go here
+                        //   java.net.SocketException: Socket closed
+                        //why does this error occur?
                     }
                 };
-                while ((byteOfData = inputStream.read()) != -1) {
-                    charFromByteOfData = (char) byteOfData;
-                    out.print(charFromByteOfData);
+                remoteOutputStream.start();
+                while ((byteOfData = inputStream.read()) != -1) {  //put into thread
+                    out.print((char) byteOfData);
                 }
             }
-
         }
     }
 }
