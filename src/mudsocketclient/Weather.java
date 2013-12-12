@@ -16,6 +16,7 @@ public class Weather {
         String host = "rainmaker.wunderground.com";
         int port = 3000;
         int byteOfDataAsInt;
+
         char charFromByteOfData;
         {
             try (Socket socket = new Socket(host, port);
@@ -28,6 +29,14 @@ public class Weather {
                     out.print(charFromByteOfData);
                 }
             }
+
+            Thread readInput = new Thread() {
+
+                @Override
+                public void run() {
+                    out.println("hi");
+                }
+            };
         }
     }
 }
