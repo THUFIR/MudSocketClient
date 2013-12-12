@@ -12,6 +12,7 @@ import java.util.Observable;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static java.lang.System.out;
 
 public class InputOutput extends Observable {
 
@@ -77,7 +78,7 @@ public class InputOutput extends Observable {
             }
 
             private void printToConsole(char c) {
-                System.out.print(c);
+                out.print(c);
             }
         };
         readInput.start();

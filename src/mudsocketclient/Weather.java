@@ -1,5 +1,6 @@
 package mudsocketclient;
 
+import static java.lang.System.out;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,13 +17,23 @@ public class Weather {
         int port = 3000;
         int c;
         InputOutput io = new InputOutput();
+        int intVal;
+        char ch;
+        StringBuilder sb = null;
         {
             try (Socket socket = new Socket(host, port);
-                    OutputStream out = socket.getOutputStream();
-                    InputStream in = socket.getInputStream();
+                    InputStream inputStream = socket.getInputStream();
+                    OutputStream ouputStream = socket.getOutputStream();
                     PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
                     final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
-                io.readWriteParse(in, out);
+                while ((intVal = inputStream.read()) != -1) {
+                    ch = (char) intVal;
+                    out.print(ch);
+                   // sb.append(ch);
+                    if (intVal == 13) {
+                        sb = new StringBuilder();
+                    }
+                }
             }
         }
     }
