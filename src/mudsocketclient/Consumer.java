@@ -34,7 +34,7 @@ public class Consumer implements Runnable {
                 System.out.print((char) inputStream.read());
                 log.info(cubbyHole.toString());
             } catch (IOException ex) {
-                log.info(ex.toString());
+                log.fine(ex.toString());
             }
         }
     }

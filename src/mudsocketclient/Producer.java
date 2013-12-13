@@ -21,10 +21,10 @@ public class Producer implements Runnable {
         while(!Thread.currentThread().isInterrupted()){
             try {
                 line = scanner.nextLine();
-                log.info(line);
+                log.fine(line);
                 c.setMessage(line);
             } catch (java.util.NoSuchElementException e) {
-                log.info(e.toString());
+                log.fine(e.toString());
             }
         }
     }

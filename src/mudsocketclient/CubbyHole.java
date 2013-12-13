@@ -13,7 +13,7 @@ public class CubbyHole {
 
     public void setMessage(String message) {
         this.message = message;
-        log.info(message);
+        log.fine(message);
     }
 
     public String toString() {
