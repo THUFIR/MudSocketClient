@@ -1,40 +1,34 @@
 package mudsocketclient;
 
-import java.util.logging.Logger;
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import static java.lang.System.out;
+import java.util.logging.Logger;
 
 public class Consumer implements Runnable {
 
     private static Logger log = Logger.getLogger(Consumer.class.getName());
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
-    private CubbyHole c;
+    private CubbyHole cubbyHole;
+    private final InputStream inputStream;
+    private final OutputStream outputStream;
 
-    public Consumer(CubbyHole c) {
-        this.c = c;
+    public Consumer(CubbyHole cubbyHole, InputStream inputStream, OutputStream outputStream) {
+        this.cubbyHole = cubbyHole;
+        this.inputStream = inputStream;
+        this.outputStream = outputStream;
     }
 
     @Override
     public void run() {
-        int byteOfData;
-        try (Socket socket = new Socket(host, port);
-                InputStream inputStream = socket.getInputStream();
-                OutputStream ouputStream = socket.getOutputStream();
-                PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-                final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
-            while ((byteOfData = inputStream.read()) != -1) {
-                out.print((char) byteOfData);
-                log.info(c.getMessage());  //never logs
-                c.setMessage(new String());
-            }
-        } catch (Exception e) {
-            out.println(e);
+        log.info(inputStream.toString());
+        log.info(outputStream.toString());
+        log.info(cubbyHole.toString());
+        try {
+            System.out.print((char) inputStream.read());
+        } catch (IOException ex) {
+            log.fine(ex.toString());
         }
     }
 }

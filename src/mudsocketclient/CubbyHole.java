@@ -15,4 +15,8 @@ public class CubbyHole {
         this.message = message;
         log.info(message);
     }
+
+    public String toString() {
+        return message;
+    }
 }

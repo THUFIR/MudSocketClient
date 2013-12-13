@@ -18,9 +18,13 @@ public class Producer implements Runnable {
         String line;
         while (true) {
             scanner = new Scanner(System.in);
-            line = scanner.nextLine();
-            log.info(line);
-            c.setMessage(line);
+            try {
+                line = scanner.nextLine();
+                log.info(line);
+                c.setMessage(line);
+            } catch (java.util.NoSuchElementException e) {
+                log.fine(e.toString());
+            }
         }
     }
 }
