@@ -18,7 +18,7 @@ public class Producer implements Runnable {
         String line;
         scanner = new Scanner(System.in);
         log.info("ready to scan...");
-        while (true) {
+        while(Thread.currentThread().isInterrupted()){
             try {
                 line = scanner.nextLine();
                 log.info(line);
