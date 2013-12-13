@@ -13,12 +13,13 @@ public class Consumer implements Runnable {
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
     private CubbyHole cubbyHole;
+    private final Socket socket;
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
     public Consumer(CubbyHole cubbyHole) throws UnknownHostException, IOException {
         this.cubbyHole = cubbyHole;
-        Socket socket = new Socket(host, port);
+        socket = new Socket(host, port);
         inputStream = socket.getInputStream();
         outputStream = socket.getOutputStream();
     }
