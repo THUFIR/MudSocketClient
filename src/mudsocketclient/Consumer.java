@@ -26,13 +26,12 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        log.info(inputStream.toString());
-        log.info(outputStream.toString());
+        log.info("socket is\t" + socket.isConnected());
         log.info(cubbyHole.toString());
-        while (!Thread.currentThread().isInterrupted()) {
+        while (true) {
             try {
                 System.out.print((char) inputStream.read());
-                  if ((!"".equals(cubbyHole.toString())&&(!"some message".equals(cubbyHole.toString())))) {
+                if ((!"".equals(cubbyHole.toString()) && (!"some message".equals(cubbyHole.toString())))) {
                     log.info(cubbyHole.toString());
                 }
             } catch (IOException ex) {
