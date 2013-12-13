@@ -1,56 +1,38 @@
 package mudsocketclient;
 
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.net.UnknownHostException;
-import static java.lang.System.out;
+import java.util.Observable;
+import java.util.Observer;
 
-public class Telnet {
+public class Telnet implements Observer {
 
-    
-    public static void main(String[] args) throws UnknownHostException, IOException {
-        final String host = "rainmaker.wunderground.com";
-        final int port = 3000;
+    public Telnet() {
+        startThreads();
+    }
 
-        Thread local = new Thread() {
+    public static void main(String[] args) {
+        new Telnet();
+    }
 
-            @Override
-            public void run() {
-                Scanner scanner;
-                String line;
-                while (true) {
-                    scanner = new Scanner(System.in);
-                    line = scanner.nextLine();
-                    out.println("\n\nyou entered\t\"" + line + "\"\n");
-                }
-            }
-        };
-        local.start();
-        Thread remote = new Thread() {
+    public void startThreads() {
+        LocalIO local = new LocalIO();
+        Thread localThread = new Thread(new LocalIO());
+        Thread remoteThread = new Thread(new RemoteIO());
 
-            @Override
-            public void run() {
-                int byteOfData;
-                try (Socket socket = new Socket(host, port);
-                        InputStream inputStream = socket.getInputStream();
-                        OutputStream ouputStream = socket.getOutputStream();
-                        PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-                        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
-                    while ((byteOfData = inputStream.read()) != -1) {
-                        out.print((char) byteOfData);
-                    }
-                } catch (Exception e) {
-                    out.println(e);
-                }
-            }
-        };
+        //how do observe, or know what's happening with
+        //the local thread?
 
-        remote.start();
+        local.addObserver(this); //is this ok???
+
+        //really, I don't want to observe the Thread, but the anonymous
+        //LocalIO reference...
+
+
+        localThread.start();
+        remoteThread.start();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
