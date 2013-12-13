@@ -1,38 +1,24 @@
 package mudsocketclient;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.concurrent.Semaphore;
 
-public class Telnet implements Observer {
+public class Telnet {
 
-    public Telnet() {
+    public Telnet() throws InterruptedException {
         startThreads();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         new Telnet();
     }
 
-    public void startThreads() {
-        LocalIO local = new LocalIO();
+    public void startThreads() throws InterruptedException {
+        Semaphore s = new Semaphore(1, true);
+        
         Thread localThread = new Thread(new LocalIO());
         Thread remoteThread = new Thread(new RemoteIO());
 
-        //how do observe, or know what's happening with
-        //the local thread?
-
-        local.addObserver(this); //is this ok???
-
-        //really, I don't want to observe the Thread, but the anonymous
-        //LocalIO reference...
-
-
         localThread.start();
         remoteThread.start();
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -1,13 +1,9 @@
 package mudsocketclient;
 
-import java.util.Observable;
 import java.util.Scanner;
 import static java.lang.System.out;
 
-public class LocalIO extends Observable implements Runnable {
-
-    final String host = "rainmaker.wunderground.com";
-    final int port = 3000;
+public class LocalIO implements Runnable {
 
     @Override
     public void run() {
