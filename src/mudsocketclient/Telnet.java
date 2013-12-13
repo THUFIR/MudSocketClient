@@ -10,13 +10,10 @@ public class Telnet {
         new Telnet();
     }
 
-    public void startThreads() throws InterruptedException {       
-
+    public void startThreads() throws InterruptedException {
         CubbyHole cubbyHole = new CubbyHole();
-        
         Thread producer = new Thread(new Producer(cubbyHole));
         Thread consumer = new Thread(new Consumer(cubbyHole));
-
         producer.start();
         consumer.start();
     }

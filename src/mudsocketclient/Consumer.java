@@ -10,16 +10,16 @@ import java.net.Socket;
 import static java.lang.System.out;
 
 public class Consumer implements Runnable {
-    
+
     private static Logger log = Logger.getLogger(Consumer.class.getName());
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
-    CubbyHole c;
-    
+    private CubbyHole c;
+
     public Consumer(CubbyHole c) {
         this.c = c;
     }
-    
+
     @Override
     public void run() {
         log.info(c.getMessage());
