@@ -1,5 +1,6 @@
 package mudsocketclient;
 
+import java.util.Scanner;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,24 +13,25 @@ import static java.lang.System.out;
 
 public class Telnet {
 
+    
     public static void main(String[] args) throws UnknownHostException, IOException {
         final String host = "rainmaker.wunderground.com";
         final int port = 3000;
-
-
-
 
         Thread local = new Thread() {
 
             @Override
             public void run() {
+                Scanner scanner;
+                String line;
+                while (true) {
+                    scanner = new Scanner(System.in);
+                    line = scanner.nextLine();
+                    out.println("\n\nyou entered\t\"" + line + "\"\n");
+                }
             }
         };
-        
-        
-        
-        
-        
+        local.start();
         Thread remote = new Thread() {
 
             @Override
@@ -48,7 +50,7 @@ public class Telnet {
                 }
             }
         };
-        remote.start();
 
+        remote.start();
     }
 }
