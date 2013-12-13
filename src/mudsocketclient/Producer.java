@@ -6,10 +6,10 @@ import java.util.logging.Logger;
 public class Producer implements Runnable {
 
     private static Logger log = Logger.getLogger(Producer.class.getName());
-    private CubbyHole c;
+    private CubbyHole cubbyHole;
 
-    public Producer(CubbyHole c) {
-        this.c = c;
+    public Producer(CubbyHole cubbyHole) {
+        this.cubbyHole = cubbyHole;
     }
 
     @Override
@@ -18,11 +18,13 @@ public class Producer implements Runnable {
         String line;
         scanner = new Scanner(System.in);
         log.info("ready to scan...");
-        while(!Thread.currentThread().isInterrupted()){
+        while (!Thread.currentThread().isInterrupted()) {
             try {
                 line = scanner.nextLine();
-                log.fine(line);
-                c.setMessage(line);
+                if ((!"".equals(line)&&(!"some message".equals(line)))) {
+                    log.info(line);
+                    cubbyHole.setMessage(line);
+                }
             } catch (java.util.NoSuchElementException e) {
                 log.fine(e.toString());
             }

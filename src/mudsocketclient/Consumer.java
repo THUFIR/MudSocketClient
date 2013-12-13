@@ -32,7 +32,7 @@ public class Consumer implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 System.out.print((char) inputStream.read());
-                if (!"some message".equals(cubbyHole.getMessage())) {
+                  if ((!"".equals(cubbyHole.toString())&&(!"some message".equals(cubbyHole.toString())))) {
                     log.info(cubbyHole.toString());
                 }
             } catch (IOException ex) {
