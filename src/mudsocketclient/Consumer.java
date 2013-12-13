@@ -3,6 +3,8 @@ package mudsocketclient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Logger;
 
 public class Consumer implements Runnable {
@@ -14,10 +16,11 @@ public class Consumer implements Runnable {
     private final InputStream inputStream;
     private final OutputStream outputStream;
 
-    public Consumer(CubbyHole cubbyHole, InputStream inputStream, OutputStream outputStream) {
+    public Consumer(CubbyHole cubbyHole) throws UnknownHostException, IOException {
         this.cubbyHole = cubbyHole;
-        this.inputStream = inputStream;
-        this.outputStream = outputStream;
+        Socket socket = new Socket(host, port);
+        inputStream = socket.getInputStream();
+        outputStream = socket.getOutputStream();
     }
 
     @Override
