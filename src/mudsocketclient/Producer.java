@@ -16,14 +16,15 @@ public class Producer implements Runnable {
     public void run() {
         Scanner scanner;
         String line;
+        scanner = new Scanner(System.in);
+        log.info("ready to scan...");
         while (true) {
-            scanner = new Scanner(System.in);
             try {
                 line = scanner.nextLine();
                 log.info(line);
                 c.setMessage(line);
             } catch (java.util.NoSuchElementException e) {
-                log.fine(e.toString());
+                log.info(e.toString());
             }
         }
     }

@@ -25,10 +25,12 @@ public class Consumer implements Runnable {
         log.info(inputStream.toString());
         log.info(outputStream.toString());
         log.info(cubbyHole.toString());
-        try {
-            System.out.print((char) inputStream.read());
-        } catch (IOException ex) {
-            log.fine(ex.toString());
+        while (true) {
+            try {
+                System.out.print((char) inputStream.read());
+            } catch (IOException ex) {
+                log.info(ex.toString());
+            }
         }
     }
 }
