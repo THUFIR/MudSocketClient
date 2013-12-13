@@ -27,8 +27,7 @@ public class Telnet {
         CubbyHole cubbyHole = new CubbyHole();
         try (Socket socket = new Socket(host, port);
                 InputStream inputStream = socket.getInputStream();
-                OutputStream outputStream = socket.getOutputStream();
-                final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
+                OutputStream outputStream = socket.getOutputStream()) {
             Thread producer = new Thread(new Producer(cubbyHole));
             Thread consumer = new Thread(new Consumer(cubbyHole, inputStream, outputStream));
             producer.start();
