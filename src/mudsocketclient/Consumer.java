@@ -1,5 +1,7 @@
 package mudsocketclient;
 
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.logging.Logger;
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -15,6 +17,7 @@ public class Consumer implements Runnable {
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
     private CubbyHole c;
+    private Deque fred;
 
     public Consumer(CubbyHole c) {
         this.c = c;
@@ -22,8 +25,9 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        log.info(c.getMessage());
-        c.setMessage(new String());
+        fred = new ConcurrentLinkedDeque();
+        log.info(c.getMessage());  //never logs
+        //c.setMessage(new String());
         int byteOfData;
         try (Socket socket = new Socket(host, port);
                 InputStream inputStream = socket.getInputStream();
