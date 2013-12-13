@@ -28,15 +28,18 @@ public class Consumer implements Runnable {
     public void run() {
         log.info("socket is\t" + socket.isConnected());
         log.info(cubbyHole.toString());
-        while (true) {
-            try {
+        try {
+            while (true) {
+
+                log.fine("consumer is running\t\t\t" + cubbyHole);
                 System.out.print((char) inputStream.read());
                 if ((!"".equals(cubbyHole.toString()) && (!"some message".equals(cubbyHole.toString())))) {
                     log.info(cubbyHole.toString());
                 }
-            } catch (IOException ex) {
-                log.fine(ex.toString());
             }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+
         }
     }
 }
