@@ -1,7 +1,5 @@
 package mudsocketclient;
 
-import java.util.concurrent.Semaphore;
-
 public class Telnet {
 
     public Telnet() throws InterruptedException {
@@ -12,13 +10,14 @@ public class Telnet {
         new Telnet();
     }
 
-    public void startThreads() throws InterruptedException {
-        Semaphore s = new Semaphore(1, true);
-        
-        Thread localThread = new Thread(new LocalIO());
-        Thread remoteThread = new Thread(new RemoteIO());
+    public void startThreads() throws InterruptedException {       
 
-        localThread.start();
-        remoteThread.start();
+        CubbyHole cubbyHole = new CubbyHole();
+        
+        Thread producer = new Thread(new Producer(cubbyHole));
+        Thread consumer = new Thread(new Consumer(cubbyHole));
+
+        producer.start();
+        consumer.start();
     }
 }

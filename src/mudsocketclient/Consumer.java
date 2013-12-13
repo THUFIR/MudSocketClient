@@ -9,15 +9,21 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import static java.lang.System.out;
 
-public class RemoteIO implements Runnable {
-
-    private static Logger log = Logger.getLogger(RemoteIO.class.getName());
+public class Consumer implements Runnable {
+    
+    private static Logger log = Logger.getLogger(Consumer.class.getName());
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
-
+    CubbyHole c;
+    
+    public Consumer(CubbyHole c) {
+        this.c = c;
+    }
+    
     @Override
     public void run() {
-        log.fine(host + port);
+        log.info(c.getMessage());
+        c.setMessage(new String());
         int byteOfData;
         try (Socket socket = new Socket(host, port);
                 InputStream inputStream = socket.getInputStream();
