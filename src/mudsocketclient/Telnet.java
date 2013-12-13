@@ -21,9 +21,10 @@ public class Telnet {
         final String host = "rainmaker.wunderground.com";
         final int port = 3000;
         CubbyHole cubbyHole = new CubbyHole();
-        try (Socket socket = new Socket(host, port);
-                InputStream inputStream = socket.getInputStream();
-                OutputStream outputStream = socket.getOutputStream()) {
+        try {
+            Socket socket = new Socket(host, port);
+            InputStream inputStream = socket.getInputStream();
+            OutputStream outputStream = socket.getOutputStream();
             Thread producer = new Thread(new Producer(cubbyHole));
             Thread consumer = new Thread(new Consumer(cubbyHole, inputStream, outputStream));
             producer.start();
