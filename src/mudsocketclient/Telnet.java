@@ -37,7 +37,11 @@ public final class Telnet implements Observer {
             String line = (String) arg;
             triggers.parse(line);
             String cmd = triggers.getCmd();
-            cmds.add(cmd);
+            try {
+                cmds.add(cmd);
+            } catch (NullPointerException npe) {
+                log.fine(npe.toString());
+            }
         }
         if (o instanceof LocalConnection) {
             cmds.add((String) arg);
