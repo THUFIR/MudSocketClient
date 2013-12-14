@@ -11,15 +11,13 @@ public class LocalConnection extends Observable {
     public LocalConnection() {
     }
 
-
     public void read() {
         Thread readFromConsole = new Thread() {
 
             @Override
             public void run() {
+                Scanner scanner = new Scanner(System.in);
                 while (true) {
-                    Scanner scanner;
-                    scanner = new Scanner(System.in);
                     String line = scanner.nextLine();
                     setChanged();
                     notifyObservers(line);
