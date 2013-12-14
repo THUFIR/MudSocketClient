@@ -39,7 +39,7 @@ public class Consumer implements Runnable {
                 stringFromConsumer = queue.pop();
                 log.info(stringFromConsumer);
             } catch (NoSuchElementException ex) {
-                log.info(ex.toString());
+                log.fine(ex.toString());  //spammy output, so level is fine
             }
         }
     }

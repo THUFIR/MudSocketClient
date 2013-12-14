@@ -16,12 +16,12 @@ public class Producer implements Runnable {
     @Override
     public void run() {
         while (true) {
-            log.info("running...");
             Scanner scanner;
             String line;
             scanner = new Scanner(System.in);
             line = scanner.nextLine();
             queue.add(line);
+            log.info(line);   //echoes that line was entered
         }
     }
 }
