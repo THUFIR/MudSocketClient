@@ -18,7 +18,7 @@ public class Consumer implements Runnable {
     private final InputStream inputStream;
     private final OutputStream outputStream;
     private final Deque<String> queue;
-    private String stringFromConsumer = "line scan of user input";
+    private String stringFromProducer = "line scan of user input";
 
     public Consumer(Deque<String> queue) throws UnknownHostException, IOException {
         this.queue = queue;
@@ -36,12 +36,12 @@ public class Consumer implements Runnable {
                 log.fine(ex.toString());
             }
             try {
-                stringFromConsumer = queue.pop();
-                log.info(stringFromConsumer);
+                stringFromProducer = queue.pop();
+                log.info(stringFromProducer);
             } catch (NoSuchElementException ex) {
-                log.info(ex.toString());  //spammy output, so level is fine
+                log.fine(ex.toString());
                 try {
-                    Thread.sleep(999);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     log.fine(e.toString());
                 }
