@@ -2,6 +2,8 @@ package mudsocketclient;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.Deque;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.logging.Logger;
 
 public class Telnet {
@@ -19,9 +21,11 @@ public class Telnet {
     public void startThreads() throws InterruptedException, UnknownHostException, IOException {
         final String host = "rainmaker.wunderground.com";
         final int port = 3000;
+        Deque<CubbyHole> queue = new ConcurrentLinkedDeque<>();
         CubbyHole cubbyHole = new CubbyHole();
-        Thread producer = new Thread(new Producer(cubbyHole));
-        Thread consumer = new Thread(new Consumer(cubbyHole));
+        queue.add(cubbyHole);
+        Thread producer = new Thread(new Producer(queue));
+        Thread consumer = new Thread(new Consumer(queue));
         producer.start();
         consumer.start();
     }

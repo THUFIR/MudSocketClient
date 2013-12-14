@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Deque;
+import java.util.NoSuchElementException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Consumer implements Runnable {
@@ -12,13 +15,14 @@ public class Consumer implements Runnable {
     private static Logger log = Logger.getLogger(Consumer.class.getName());
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
-    private CubbyHole cubbyHole;
+    private CubbyHole cubbyHole = new CubbyHole();
     private final Socket socket;
     private final InputStream inputStream;
     private final OutputStream outputStream;
+    private final Deque<CubbyHole> queue;
 
-    public Consumer(CubbyHole cubbyHole) throws UnknownHostException, IOException {
-        this.cubbyHole = cubbyHole;
+    public Consumer(Deque<CubbyHole> queue) throws UnknownHostException, IOException {
+        this.queue = queue;
         socket = new Socket(host, port);
         inputStream = socket.getInputStream();
         outputStream = socket.getOutputStream();
@@ -26,20 +30,22 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        log.info("socket is\t" + socket.isConnected());
-        log.info(cubbyHole.toString());
-        try {
-            while (true) {
-
-                log.fine("consumer is running\t\t\t" + cubbyHole);
+        while (true) {
+            try {
                 System.out.print((char) inputStream.read());
                 if ((!"".equals(cubbyHole.toString()) && (!"some message".equals(cubbyHole.toString())))) {
-                    log.info(cubbyHole.toString());
+                    log.fine(cubbyHole.toString());
                 }
+            } catch (IOException ex) {
+                log.fine(ex.toString());
             }
-        } catch (IOException ex) {
-            ex.printStackTrace();
 
+            try {
+                cubbyHole = queue.pop();
+                log.log(Level.FINE, "consumer is running\t\t\t{0}", cubbyHole);
+            } catch ( NoSuchElementException ex) {
+                log.fine(ex.toString());
+            }
         }
     }
 }

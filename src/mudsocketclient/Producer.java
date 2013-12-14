@@ -1,15 +1,17 @@
 package mudsocketclient;
 
+import java.util.Deque;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 public class Producer implements Runnable {
 
     private static Logger log = Logger.getLogger(Producer.class.getName());
-    private CubbyHole cubbyHole;
+    private CubbyHole cubbyHole = new CubbyHole();
+    private final Deque<CubbyHole> queue;
 
-    public Producer(CubbyHole cubbyHole) {
-        this.cubbyHole = cubbyHole;
+    public Producer(Deque<CubbyHole> queue) {
+        this.queue = queue;
     }
 
     @Override
@@ -17,11 +19,8 @@ public class Producer implements Runnable {
         Scanner scanner;
         String line;
         scanner = new Scanner(System.in);
-        log.info("ready to scan...");
         line = scanner.nextLine();
-        if ((!"".equals(line) && (!"some message".equals(line)))) {
-            log.info(line);
-            cubbyHole.setMessage(line);
-        }
+        cubbyHole.setMessage(line);
+        queue.add(cubbyHole);
     }
 }
