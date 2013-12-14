@@ -2,13 +2,15 @@ package mudsocketclient;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.Deque;
-import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.logging.Logger;
 
-public final class Telnet {
+public final class Telnet implements Observer {
 
     private static Logger log = Logger.getLogger(Telnet.class.getName());
+    LocalConnection local = new LocalConnection();
+    RemoteConnection remote = new RemoteConnection();
 
     public Telnet() throws InterruptedException, UnknownHostException, IOException {
         startThreads();
@@ -19,13 +21,20 @@ public final class Telnet {
     }
 
     public void startThreads() throws InterruptedException, UnknownHostException, IOException {
-        final String host = "rainmaker.wunderground.com";
-        final int port = 3000;
-        Deque<String> queue = new ConcurrentLinkedDeque<>();
-        queue.add("first");
-        Thread producer = new Thread(new Producer(queue));
-        Thread consumer = new Thread(new Consumer(queue));
-        producer.start();
-        consumer.start();
+        local.addObserver(this);
+        local.read();
+        remote.read();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (o instanceof LocalConnection) {
+            String line = (String) arg;
+            try {
+                remote.write(line);
+            } catch (IOException ioe) {
+                log.warning(ioe.toString());
+            }
+        }
     }
 }
