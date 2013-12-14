@@ -31,20 +31,15 @@ public class Consumer implements Runnable {
     public void run() {
         while (true) {
             try {
-                System.out.print((char) inputStream.read());
-            } catch (IOException ex) {
-                log.fine(ex.toString());
-            }
-            try {
+
+                System.err.print((char) inputStream.read());
                 stringFromProducer = queue.pop();
                 log.info(stringFromProducer);
-            } catch (NoSuchElementException ex) {
+
+            } catch (IOException | NoSuchElementException ex) {
                 log.fine(ex.toString());
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    log.fine(e.toString());
-                }
+            } finally {
+                log.fine("no more consumer");
             }
         }
     }
