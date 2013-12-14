@@ -30,25 +30,17 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-<<<<<<< HEAD
-
-        
-=======
->>>>>>> 28330a60c0f54d64b288410bd0b32973b7bf2f25
         while (true) {
+            log.fine("running...");
             try {
                 System.out.print((char) inputStream.read());
-                if ((!"".equals(cubbyHole.toString()) && (!"some message".equals(cubbyHole.toString())))) {
-                    log.fine(cubbyHole.toString());
-                }
             } catch (IOException ex) {
                 log.fine(ex.toString());
             }
-
             try {
                 cubbyHole = queue.pop();
                 log.log(Level.FINE, "consumer is running\t\t\t{0}", cubbyHole);
-            } catch ( NoSuchElementException ex) {
+            } catch (NoSuchElementException ex) {
                 log.fine(ex.toString());
             }
         }

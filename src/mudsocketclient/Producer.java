@@ -16,6 +16,7 @@ public class Producer implements Runnable {
 
     @Override
     public void run() {
+        log.info("running...");
         Scanner scanner;
         String line;
         scanner = new Scanner(System.in);
