@@ -21,7 +21,7 @@ public class Producer implements Runnable {
             scanner = new Scanner(System.in);
             line = scanner.nextLine();
             queue.add(line);
-            log.info(line);   //echoes that line was entered
+            log.info(line);   //echoes that line was entered correctly
         }
     }
 }
