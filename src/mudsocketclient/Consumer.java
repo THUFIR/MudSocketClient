@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Deque;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Consumer implements Runnable {
