@@ -30,6 +30,8 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
+
+        
         while (true) {
             try {
                 System.out.print((char) inputStream.read());
