@@ -21,9 +21,8 @@ public class Telnet {
     public void startThreads() throws InterruptedException, UnknownHostException, IOException {
         final String host = "rainmaker.wunderground.com";
         final int port = 3000;
-        Deque<CubbyHole> queue = new ConcurrentLinkedDeque<>();
-        CubbyHole cubbyHole = new CubbyHole();
-        queue.add(cubbyHole);
+        Deque<String> queue = new ConcurrentLinkedDeque<>();
+        queue.add("first");
         Thread producer = new Thread(new Producer(queue));
         Thread consumer = new Thread(new Consumer(queue));
         producer.start();

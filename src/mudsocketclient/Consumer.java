@@ -15,13 +15,13 @@ public class Consumer implements Runnable {
     private static Logger log = Logger.getLogger(Consumer.class.getName());
     final String host = "rainmaker.wunderground.com";
     final int port = 3000;
-    private CubbyHole cubbyHole = new CubbyHole();
     private final Socket socket;
     private final InputStream inputStream;
     private final OutputStream outputStream;
-    private final Deque<CubbyHole> queue;
+    private final Deque<String> queue;
+    private String stringFromConsumer = "line scan of user input";
 
-    public Consumer(Deque<CubbyHole> queue) throws UnknownHostException, IOException {
+    public Consumer(Deque<String> queue) throws UnknownHostException, IOException {
         this.queue = queue;
         socket = new Socket(host, port);
         inputStream = socket.getInputStream();
@@ -31,17 +31,16 @@ public class Consumer implements Runnable {
     @Override
     public void run() {
         while (true) {
-            log.fine("running...");
             try {
                 System.out.print((char) inputStream.read());
             } catch (IOException ex) {
                 log.fine(ex.toString());
             }
             try {
-                cubbyHole = queue.pop();
-                log.log(Level.FINE, "consumer is running\t\t\t{0}", cubbyHole);
+                stringFromConsumer = queue.pop();
+                log.info(stringFromConsumer);
             } catch (NoSuchElementException ex) {
-                log.fine(ex.toString());
+                log.info(ex.toString());
             }
         }
     }
