@@ -9,10 +9,11 @@ public class StatelessTriggers {
     private static Logger log = Logger.getLogger(StatelessTriggers.class.getName());
     private String cmd = null;
     private String line = null;
+    private String enemy = null;
 
     public void parse(String line) {
         this.line = line;
-        if (!line.equalsIgnoreCase(line)) {
+        if (!"null".equalsIgnoreCase(line)) {
             confuse();
             fighting();
         } else {
@@ -26,11 +27,29 @@ public class StatelessTriggers {
         if (line.contains("confusing the hell out of")) {
             Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");  //(\w+)\.
             Matcher matcher = pattern.matcher(line);
-            String enemy = null;
             while (matcher.find()) {
                 enemy = matcher.group();
             }
             cmd = "backstab " + enemy;
+        }
+    }
+
+    private void fighting() {//You are fighting Citizen
+        if (line.contains("You are fighting")) {
+            log.info(line);
+            Pattern pattern = Pattern.compile("(\\w+)$");  //(\w+)\.
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                enemy = matcher.group();
+            }
+            cmd = "confuse " + enemy;
+            nullEnemy();
+        }
+    }
+
+    private void nullEnemy() {
+        if ((enemy == null) || ("null".equalsIgnoreCase(enemy))) {
+            cmd = null;
         }
     }
 
@@ -40,17 +59,5 @@ public class StatelessTriggers {
 
     public void clear() {
         cmd = null;
-    }
-
-    private void fighting() {//You are fighting Citizen
-        if (line.contains("you are fighting")) {
-            Pattern pattern = Pattern.compile("(\\w+)$");  //(\w+)\.
-            Matcher matcher = pattern.matcher(line);
-            String enemy = null;
-            while (matcher.find()) {
-                enemy = matcher.group();
-            }
-            cmd = "confuse" + enemy;
-        }
     }
 }
