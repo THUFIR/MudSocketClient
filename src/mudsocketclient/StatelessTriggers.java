@@ -42,9 +42,9 @@ public class StatelessTriggers {
         cmd = null;
     }
 
-    private void fighting() {
+    private void fighting() {//You are fighting Citizen
         if (line.contains("you are fighting")) {
-            Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");  //(\w+)\.
+            Pattern pattern = Pattern.compile("(\\w+)$");  //(\w+)\.
             Matcher matcher = pattern.matcher(line);
             String enemy = null;
             while (matcher.find()) {

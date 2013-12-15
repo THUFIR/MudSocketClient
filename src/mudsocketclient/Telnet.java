@@ -33,20 +33,22 @@ public final class Telnet implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        String cmd = null;
         if (o instanceof RemoteConnection) {
             String line = (String) arg;
             triggers.parse(line);
-            String cmd = triggers.getCmd();
-            if (cmd != null) {
-                try {
-                    cmds.add(cmd);
-                } catch (NullPointerException npe) {
-                    log.fine(npe.toString());
-                }
-            }
+            cmd = triggers.getCmd();
         }
         if (o instanceof LocalConnection) {
-            cmds.add((String) arg);
+            cmd = (String) arg;
+        }
+        if (cmd != null) {
+            try {
+                cmds.add(cmd);
+                log.info(cmd);
+            } catch (NullPointerException npe) {
+                log.fine(npe.toString());
+            }
         }
         execute();
     }
