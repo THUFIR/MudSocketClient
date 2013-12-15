@@ -1,32 +1,36 @@
 package mudsocketclient;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
+import java.util.Deque;
 import java.util.Observable;
 import java.util.logging.Logger;
 
 public class RemoteConnection extends Observable {
 
     private static Logger log = Logger.getLogger(RemoteConnection.class.getName());
-    final String host = "dune.servint.com";
-    final int port = 6789;
     private final Socket socket;
-    private final InputStream inputStream;
-    private final OutputStream outputStream;
+    private final BufferedInputStream in;
+    private final BufferedOutputStream out;
     private final static String UTF8 = "UTF-8";
 
-    public RemoteConnection() throws UnknownHostException, IOException {
+    public RemoteConnection(String host, int port) throws UnknownHostException, IOException {
         socket = new Socket(host, port);
-        inputStream = socket.getInputStream();
-        outputStream = socket.getOutputStream();
+        in = new BufferedInputStream(socket.getInputStream());
+        out = new BufferedOutputStream(socket.getOutputStream());
     }
 
-    public void write(String line) throws IOException {
-        outputStream.write(line.concat("\r\n").getBytes(Charset.forName(UTF8)));
+    public void write(Deque<String> commands) throws IOException {
+        String command;
+        while (!commands.isEmpty()) {
+            command = commands.pop();
+            out.write(command.concat("\r\n").getBytes(Charset.forName(UTF8)));
+        }
+        out.flush();
     }
 
     void read() {
@@ -39,7 +43,7 @@ public class RemoteConnection extends Observable {
                 int i;
                 while (true) {
                     try {
-                        i = inputStream.read();
+                        i = in.read();
                         ch = (char) i;
                         sb.append(ch);
                         System.out.print(ch);

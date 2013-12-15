@@ -12,7 +12,7 @@ public final class Telnet implements Observer {
 
     private static Logger log = Logger.getLogger(Telnet.class.getName());
     LocalConnection local = new LocalConnection();
-    RemoteConnection remote = new RemoteConnection();
+    RemoteConnection remote = new RemoteConnection("dune.servint.com", 6789);
     StatelessTriggers triggers = new StatelessTriggers();
     private Deque<String> cmds = new ArrayDeque<>();
 
@@ -55,12 +55,11 @@ public final class Telnet implements Observer {
     }
 
     private void execute() {
-        while (cmds.size() > 0) {
-            try {
-                remote.write(cmds.pop());
-            } catch (IOException ioe) {
-                log.warning(ioe.toString());
-            }
+        try {
+            remote.write(cmds);
+        } catch (IOException ex) {
+            log.fine(ex.toString());
         }
+        cmds = new ArrayDeque<>();;
     }
 }

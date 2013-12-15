@@ -7,57 +7,61 @@ import java.util.regex.Pattern;
 public class StatelessTriggers {
 
     private static Logger log = Logger.getLogger(StatelessTriggers.class.getName());
-    private String cmd = null;
-    private String line = null;
-    private String enemy = null;
+    private static String command = null;
+    private static String line = null;
+    private static String enemy = null;
 
-    public void parse(String line) {
-        this.line = line;
-        if (!"null".equalsIgnoreCase(line)) {
+    public static void parse(String line) {
+        StatelessTriggers.line = line;
+        if ((!"null".equalsIgnoreCase(line)) && (line != null)) {
             confuse();
             fighting();
         } else {
-            cmd = null;
-            this.line = null;
+            command = null;
+            StatelessTriggers.line = null;
             log.fine(line);
         }
     }
 
-    private void confuse() {
+    private static void confuse() {
         if (line.contains("confusing the hell out of")) {
             Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");  //(\w+)\.
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
                 enemy = matcher.group();
             }
-            cmd = "backstab " + enemy;
+            command = "backstab " + enemy;
         }
     }
 
-    private void fighting() {//You are fighting Citizen
+    private static void fighting() {
+        enemy = null;
+        command = null;
         if (line.contains("You are fighting")) {
             log.info(line);
-            Pattern pattern = Pattern.compile("(\\w+)$");  //(\w+)\.
+            Pattern pattern = Pattern.compile("(\\w+)$");
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
                 enemy = matcher.group();
             }
-            cmd = "confuse " + enemy;
-            nullEnemy();
+            command = "confuse " + enemy;
+            log.info(command);
+            checkForNullEnemy();
         }
     }
 
-    private void nullEnemy() {
+    private static void checkForNullEnemy() {
         if ((enemy == null) || ("null".equalsIgnoreCase(enemy))) {
-            cmd = null;
+            log.info(enemy);
+            command = null;
         }
     }
 
-    public String getCmd() {
-        return cmd;
+    public static String getCmd() {
+        return command;
     }
 
-    public void clear() {
-        cmd = null;
+    public static void clear() {
+        command = null;
     }
 }
