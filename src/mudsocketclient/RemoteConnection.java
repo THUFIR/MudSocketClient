@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.Observable;
 import java.util.logging.Logger;
 
@@ -23,16 +24,8 @@ public class RemoteConnection extends Observable {
         outputStream = socket.getOutputStream();
     }
 
-    public void write(String line) throws IOException {
-        try {
-            byte[] bytes = line.getBytes();
-            outputStream.write(bytes);
-            outputStream.write(13);
-            outputStream.write(10);
-            outputStream.flush();
-        } catch (NullPointerException npe) {
-            log.fine(npe.toString());
-        }
+    public void write(String line) throws IOException, NullPointerException {
+        outputStream.write(line.concat("\r\n").getBytes(Charset.forName("UTF-8")));
     }
 
     void read() {

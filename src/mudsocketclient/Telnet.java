@@ -45,11 +45,12 @@ public final class Telnet implements Observer {
         if (cmd != null) {
             try {
                 cmds.add(cmd);
-                log.info(cmd);
+                log.fine(cmd);
             } catch (NullPointerException npe) {
                 log.fine(npe.toString());
             }
         }
+        triggers.clear();
         execute();
     }
 
