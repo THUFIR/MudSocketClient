@@ -17,6 +17,7 @@ public class RemoteConnection extends Observable {
     private final Socket socket;
     private final InputStream inputStream;
     private final OutputStream outputStream;
+    private final static String UTF8 = "UTF-8";
 
     public RemoteConnection() throws UnknownHostException, IOException {
         socket = new Socket(host, port);
@@ -24,8 +25,8 @@ public class RemoteConnection extends Observable {
         outputStream = socket.getOutputStream();
     }
 
-    public void write(String line) throws IOException, NullPointerException {
-        outputStream.write(line.concat("\r\n").getBytes(Charset.forName("UTF-8")));
+    public void write(String line) throws IOException {
+        outputStream.write(line.concat("\r\n").getBytes(Charset.forName(UTF8)));
     }
 
     void read() {
