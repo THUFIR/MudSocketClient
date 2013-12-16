@@ -58,7 +58,6 @@ public class StatelessTriggers {
 
     private static void killed() {
         if (line.contains("You killed")) {
-            log.warning(line);
             dot();
             command = "draw from " + enemy;
         }
@@ -73,9 +72,15 @@ public class StatelessTriggers {
 
     private static void needle() {
         if (line.contains("You put a needle in the corpse")) {
-            log.warning(line);
             dot();
             command = "transfuse from "+ enemy;
+        }
+    }
+        
+        
+    private static void transfusion() {
+        if (line.contains("You pull your transfusion tubes out")) {
+            command = "process corpse";
         }
     }
 }
