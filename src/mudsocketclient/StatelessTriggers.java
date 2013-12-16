@@ -14,60 +14,13 @@ public class StatelessTriggers {
     public static void parse(String line) {
         StatelessTriggers.line = line;
         if ((!"null".equalsIgnoreCase(line)) && (line != null)) {
-            confuse();
+            confused();
             fighting();
+            killed();
+            needle();
         } else {
             command = null;
             StatelessTriggers.line = null;
-            log.fine(line);
-        }
-    }
-
-    //You move quickly, confusing the hell out of Priest.
-    private static void confuse() {
-        if (line.contains("confusing the hell out of")) {
-            Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");
-            Matcher matcher = pattern.matcher(line);
-            while (matcher.find()) {
-                enemy = matcher.group();
-            }
-            command = "backstab " + enemy;
-        }
-    }
-
-    //You killed Priest.
-    private static void killed() {
-        if (line.contains("You killed")) {
-            Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");
-            Matcher matcher = pattern.matcher(line);
-            while (matcher.find()) {
-                enemy = matcher.group();
-            }
-            command = "draw from " + enemy;
-        }
-    }
-
-//    You are fighting Priest
-    private static void fighting() {
-        enemy = null;
-        command = null;
-        if (line.contains("You are fighting")) {
-            log.info(line);
-            Pattern pattern = Pattern.compile("(\\w+)$");
-            Matcher matcher = pattern.matcher(line);
-            while (matcher.find()) {
-                enemy = matcher.group();
-            }
-            command = "confuse " + enemy;
-            checkForNullEnemy();
-        }
-    }
-
-    private static void checkForNullEnemy() {
-        if ((enemy == null) || ("null".equalsIgnoreCase(enemy))) {
-            log.info(enemy);
-            command = null;
-            enemy = null;
         }
     }
 
@@ -78,5 +31,51 @@ public class StatelessTriggers {
     public static void clear() {
         enemy = null;
         command = null;
+    }
+
+    private static void dot() {
+        Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");
+        Matcher matcher = pattern.matcher(line);
+        while (matcher.find()) {
+            enemy = matcher.group();
+        }
+    }
+
+    private static void noDot() {
+        Pattern pattern = Pattern.compile("(\\w+)$");
+        Matcher matcher = pattern.matcher(line);
+        while (matcher.find()) {
+            enemy = matcher.group();
+        }
+    }
+
+    private static void confused() {
+        if (line.contains("confusing the hell out of")) {
+            dot();
+            command = "backstab " + enemy;
+        }
+    }
+
+    private static void killed() {
+        if (line.contains("You killed")) {
+            log.warning(line);
+            dot();
+            command = "draw from " + enemy;
+        }
+    }
+
+    private static void fighting() {
+        if (line.contains("You are fighting")) {
+            noDot();
+            command = "confuse " + enemy;
+        }
+    }
+
+    private static void needle() {
+        if (line.contains("You put a needle in the corpse")) {
+            log.warning(line);
+            dot();
+            command = "transfuse from "+ enemy;
+        }
     }
 }

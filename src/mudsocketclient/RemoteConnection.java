@@ -29,29 +29,28 @@ public class RemoteConnection extends Observable {
         while (!commands.isEmpty()) {
             command = commands.pop();
             out.write(command.concat("\r\n").getBytes(Charset.forName(UTF8)));
-            log.info(command);
+            log.fine(command);
         }
         out.flush();
     }
 
-    void read() {
+    void read() {  
         Thread readRemote = new Thread() {
 
             @Override
             public void run() {
                 StringBuilder sb = new StringBuilder();
                 char ch;
-                int i;
+                int byteOfData;
                 while (true) {
                     try {
-                        i = in.read();
-                        ch = (char) i;
+                        byteOfData = in.read();
+                        ch = (char) byteOfData;
                         sb.append(ch);
                         System.out.print(ch);
-                        if (i == 13) {
+                        if (byteOfData == 13) {
                             setChanged();
                             notifyObservers(sb.toString());
-                            log.fine(sb.toString());
                             sb = new StringBuilder();
                         }
                     } catch (IOException ioe) {
