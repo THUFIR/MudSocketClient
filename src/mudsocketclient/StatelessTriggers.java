@@ -23,9 +23,10 @@ public class StatelessTriggers {
         }
     }
 
+    //You move quickly, confusing the hell out of Priest.
     private static void confuse() {
         if (line.contains("confusing the hell out of")) {
-            Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");  //(\w+)\.
+            Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");
             Matcher matcher = pattern.matcher(line);
             while (matcher.find()) {
                 enemy = matcher.group();
@@ -34,6 +35,19 @@ public class StatelessTriggers {
         }
     }
 
+    //You killed Priest.
+    private static void killed() {
+        if (line.contains("You killed")) {
+            Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");
+            Matcher matcher = pattern.matcher(line);
+            while (matcher.find()) {
+                enemy = matcher.group();
+            }
+            command = "draw from " + enemy;
+        }
+    }
+
+//    You are fighting Priest
     private static void fighting() {
         enemy = null;
         command = null;
@@ -45,7 +59,6 @@ public class StatelessTriggers {
                 enemy = matcher.group();
             }
             command = "confuse " + enemy;
-            log.info(command);
             checkForNullEnemy();
         }
     }
@@ -54,6 +67,7 @@ public class StatelessTriggers {
         if ((enemy == null) || ("null".equalsIgnoreCase(enemy))) {
             log.info(enemy);
             command = null;
+            enemy = null;
         }
     }
 
@@ -62,6 +76,7 @@ public class StatelessTriggers {
     }
 
     public static void clear() {
+        enemy = null;
         command = null;
     }
 }

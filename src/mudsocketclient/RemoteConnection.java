@@ -29,6 +29,7 @@ public class RemoteConnection extends Observable {
         while (!commands.isEmpty()) {
             command = commands.pop();
             out.write(command.concat("\r\n").getBytes(Charset.forName(UTF8)));
+            log.info(command);
         }
         out.flush();
     }
