@@ -1,7 +1,10 @@
 package mudsocketclient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,6 +18,7 @@ public class StatelessTriggers {
     public static void parse(String line) {
         StatelessTriggers.line = line;
         if ((!"null".equalsIgnoreCase(line)) && (line != null)) {
+            monitor();
             confused();
             fighting();
             killed();
@@ -30,6 +34,27 @@ public class StatelessTriggers {
     public static void clear() {
         c = new ArrayList<>();
     }
+
+    private static void monitor() {
+        if (line.contains("ADRENALINE")) {
+            Pattern pattern = Pattern.compile("(\\w+): +(\\S+)");
+            Matcher matcher = pattern.matcher(line);
+            int hpMin, hpMax, cpMin, cpMax, adr, end, berserk, enemyPerc;
+            Map<String, String> stats = new HashMap<>();
+            while (matcher.find()) {
+                stats.put(matcher.group(1), matcher.group(2));
+            }
+            for (Map.Entry<String, String> e : stats.entrySet()) {
+                String key = e.getKey();
+                String val = e.getValue();
+                log.info(key + "\t" + val);
+            }
+        }
+    }
+ 
+ 
+ 
+    
 
     private static String both(boolean dot) {
         Pattern pattern = (dot) ? Pattern.compile("[\\w]+(?=\\.)") : Pattern.compile("(\\w+)$");
