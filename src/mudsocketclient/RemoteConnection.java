@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
-import java.util.Deque;
+import java.util.List;
 import java.util.Observable;
 import java.util.logging.Logger;
 
@@ -24,10 +24,10 @@ public class RemoteConnection extends Observable {
         out = new BufferedOutputStream(socket.getOutputStream());
     }
 
-    public void write(Deque<String> commands) throws IOException {
+    public void write(List<String> commands) throws IOException {
         String command;
         while (!commands.isEmpty()) {
-            command = commands.pop();
+            command = commands.remove(0);
             out.write(command.concat("\r\n").getBytes(Charset.forName(UTF8)));
             log.fine(command);
         }

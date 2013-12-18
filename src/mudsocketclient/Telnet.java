@@ -3,7 +3,8 @@ package mudsocketclient;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Logger;
@@ -13,8 +14,7 @@ public final class Telnet implements Observer {
     private static Logger log = Logger.getLogger(Telnet.class.getName());
     LocalConnection local = new LocalConnection();
     RemoteConnection remote = new RemoteConnection("dune.servint.com", 6789);
-    StatelessTriggers triggers = new StatelessTriggers();
-    private Deque<String> cmds = new ArrayDeque<>();
+    List<String> commands = new ArrayList<>();
 
     public Telnet() throws InterruptedException, UnknownHostException, IOException {
         startThreads();
@@ -36,30 +36,22 @@ public final class Telnet implements Observer {
         String cmd = null;
         if (o instanceof RemoteConnection) {
             String line = (String) arg;
-            triggers.parse(line);
-            cmd = triggers.getCmd();
+            StatelessTriggers.parse(line);
+            commands.addAll(StatelessTriggers.getCmd());
         }
         if (o instanceof LocalConnection) {
-            cmd = (String) arg;
+            commands.add((String) arg);
         }
-        if (cmd != null) {
-            try {
-                cmds.add(cmd);
-                log.fine(cmd);
-            } catch (NullPointerException npe) {
-                log.fine(npe.toString());
-            }
-        }
-        triggers.clear();
+        StatelessTriggers.clear();
         execute();
     }
 
     private void execute() {
         try {
-            remote.write(cmds);
+            remote.write(commands);
         } catch (IOException ex) {
             log.fine(ex.toString());
         }
-        cmds = new ArrayDeque<>();;
+        commands = new ArrayList<>();
     }
 }

@@ -1,5 +1,7 @@
 package mudsocketclient;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,9 +9,8 @@ import java.util.regex.Pattern;
 public class StatelessTriggers {
 
     private static Logger log = Logger.getLogger(StatelessTriggers.class.getName());
-    private static String command = null;
     private static String line = null;
-    private static String enemy = null;
+    private static List<String> c = new ArrayList<>();
 
     public static void parse(String line) {
         StatelessTriggers.line = line;
@@ -17,70 +18,52 @@ public class StatelessTriggers {
             confused();
             fighting();
             killed();
-            needle();
         } else {
-            command = null;
             StatelessTriggers.line = null;
         }
     }
 
-    public static String getCmd() {
-        return command;
+    public static List<String> getCmd() {
+        return c;
     }
 
     public static void clear() {
-        enemy = null;
-        command = null;
+        c = new ArrayList<>();
     }
 
-    private static void dot() {
-        Pattern pattern = Pattern.compile("[\\w]+(?=\\.)");
+    private static String both(boolean dot) {
+        Pattern pattern = (dot) ? Pattern.compile("[\\w]+(?=\\.)") : Pattern.compile("(\\w+)$");
         Matcher matcher = pattern.matcher(line);
+        String enemy = null;
         while (matcher.find()) {
             enemy = matcher.group();
         }
-    }
-
-    private static void noDot() {
-        Pattern pattern = Pattern.compile("(\\w+)$");
-        Matcher matcher = pattern.matcher(line);
-        while (matcher.find()) {
-            enemy = matcher.group();
-        }
+        return enemy;
     }
 
     private static void confused() {
         if (line.contains("confusing the hell out of")) {
-            dot();
-            command = "backstab " + enemy;
+            c.add("backstab " + both(true));
         }
     }
 
     private static void killed() {
         if (line.contains("You killed")) {
-            dot();
-            command = "draw from " + enemy;
+            c.add("draw from " + both(true));
+            c.add("transfuse");
+            c.add("process corpse");
+            c.add("get all");
+            c.add("monitor");
+            c.add("glance");
+            c.add("monitor");
         }
     }
 
     private static void fighting() {
         if (line.contains("You are fighting")) {
-            noDot();
-            command = "confuse " + enemy;
-        }
-    }
-
-    private static void needle() {
-        if (line.contains("You put a needle in the corpse")) {
-            dot();
-            command = "transfuse from "+ enemy;
-        }
-    }
-        
-        
-    private static void transfusion() {
-        if (line.contains("You pull your transfusion tubes out")) {
-            command = "process corpse";
+            c.add("confuse " + both(false));
+            c.add("heartplunge");
+            c.add("enervate");
         }
     }
 }
