@@ -41,6 +41,7 @@ public class StatelessTriggers {
         if (line.contains("ADRENALINE")) {
             Map<String, Ratio> map = Ratios.stringToRatiosMap(line);
             Monitor mm = new Monitor(map);
+            log.info(mm.toString());
         }
     }
 
