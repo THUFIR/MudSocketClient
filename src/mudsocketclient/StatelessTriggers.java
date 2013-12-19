@@ -2,7 +2,7 @@ package mudsocketclient;
 
 import reports.Ratio;
 import reports.Monitor;
-import reports.Ratios;
+import reports.RegexMapBuilder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,9 +39,9 @@ public class StatelessTriggers {
 
     private static void monitor() {
         if (line.contains("ADRENALINE")) {
-            Map<String, Ratio> map = Ratios.stringToRatiosMap(line);
-            Monitor mm = new Monitor(map);
-            log.info(mm.toString());
+            Map<String, Ratio> map = RegexMapBuilder.stringToRatiosMap(line);
+            Monitor monitor = new Monitor(map);
+            log.info(monitor.toString());
         }
     }
 
