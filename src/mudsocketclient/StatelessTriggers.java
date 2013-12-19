@@ -55,10 +55,10 @@ public class StatelessTriggers {
         return enemy;
     }
 
-
     private static void killed() {
         if (line.contains("You killed")) {
             c.add("draw from " + both(true));
+            c.add("transfuse");
             c.add("process corpse");
             c.add("get all");
             c.add("monitor");
