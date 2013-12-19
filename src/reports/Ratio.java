@@ -1,4 +1,4 @@
-package mudsocketclient;
+package reports;
 
 public class Ratio {
 

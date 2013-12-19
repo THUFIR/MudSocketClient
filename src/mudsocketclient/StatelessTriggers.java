@@ -1,5 +1,8 @@
 package mudsocketclient;
 
+import reports.Ratio;
+import reports.Monitor;
+import reports.Ratios;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +22,6 @@ public class StatelessTriggers {
         StatelessTriggers.line = line;
         if ((!"null".equalsIgnoreCase(line)) && (line != null)) {
             monitor();
-            confused();
             fighting();
             killed();
         } else {
@@ -52,11 +54,6 @@ public class StatelessTriggers {
         return enemy;
     }
 
-    private static void confused() {
-        if (line.contains("confusing the hell out of")) {
-            c.add("backstab " + both(true));
-        }
-    }
 
     private static void killed() {
         if (line.contains("You killed")) {
