@@ -37,24 +37,11 @@ public class StatelessTriggers {
 
     private static void monitor() {
         if (line.contains("ADRENALINE")) {
-            Pattern pattern = Pattern.compile("(\\w+): +(\\S+)");
-            Matcher matcher = pattern.matcher(line);
-            int hpMin, hpMax, cpMin, cpMax, adr, end, berserk, enemyPerc;
-            Map<String, String> stats = new HashMap<>();
-            while (matcher.find()) {
-                stats.put(matcher.group(1), matcher.group(2));
-            }
-            for (Map.Entry<String, String> e : stats.entrySet()) {
-                String key = e.getKey();
-                String val = e.getValue();
-                log.info(key + "\t" + val);
-            }
+            Map<String, Ratio> m = Ratios.stringToRatiosMap(line);
+            Ratios.printMap(m);
+            Monitor mm = new Monitor();
         }
     }
- 
- 
- 
-    
 
     private static String both(boolean dot) {
         Pattern pattern = (dot) ? Pattern.compile("[\\w]+(?=\\.)") : Pattern.compile("(\\w+)$");
@@ -75,7 +62,6 @@ public class StatelessTriggers {
     private static void killed() {
         if (line.contains("You killed")) {
             c.add("draw from " + both(true));
-            c.add("transfuse");
             c.add("process corpse");
             c.add("get all");
             c.add("monitor");
