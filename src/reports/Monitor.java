@@ -9,10 +9,13 @@ import java.util.logging.Logger;
 
 public class Monitor {
 
+    public enum Health {
+
+        ADRENALINE, ENDORPHINE, BERSERK, ENEMY, HP, CP
+    }
     private static Logger log = Logger.getLogger(Monitor.class.getName());
     private String enemy = null;
-    Map<String, String> stringMap = new HashMap<>();
-    EnumMap<ATTRIBUTES, String> eMap = new EnumMap<>(ATTRIBUTES.class);
+    EnumMap<Health, Ratio> map = new EnumMap<>(Health.class);
 
     private Monitor() {
     }
@@ -21,21 +24,20 @@ public class Monitor {
         init(mapStringToRatio);
     }
 
-    //Attribs attr = Attribs.valueOf(stringValue.toUpperCase());
     private void init(Map<String, Ratio> mapStringToRatio) {
-        SimpleEntry<ATTRIBUTES, Ratio> attribsEntry = null;
+        SimpleEntry<Health, Ratio> attribsEntry = null;
         Ratio r;
         for (Entry<String, Ratio> stringEntry : mapStringToRatio.entrySet()) {
-            ATTRIBUTES attribute = ATTRIBUTES.valueOf(stringEntry.getKey().toUpperCase());
+            Health hlth = Health.valueOf(stringEntry.getKey().toUpperCase());
             r = stringEntry.getValue();
-            eMap.put(attribute, enemy);
+            map.put(hlth, r);
         }
     }
 
-    private SimpleEntry<ATTRIBUTES, Ratio> convertToEnumEntry(Entry<String, Ratio> stringEntry) {
+    private SimpleEntry<Health, Ratio> convertToEnumEntry(Entry<String, Ratio> stringEntry) {
         Ratio ratio = stringEntry.getValue();
-        SimpleEntry<ATTRIBUTES, Ratio> attribEntry = null;
-        for (ATTRIBUTES attribute : ATTRIBUTES.values()) {
+        SimpleEntry<Health, Ratio> attribEntry = null;
+        for (Health attribute : Health.values()) {
             if (stringEntry.getKey().equalsIgnoreCase(attribute.name())) {
                 attribEntry = new HashMap.SimpleEntry<>(attribute, ratio);
             }
@@ -48,7 +50,7 @@ public class Monitor {
         StringBuilder sb = new StringBuilder();
         sb.append("\nfighting\t\t" + enemy + "\n");
 
-        for (Map.Entry<?, ?> e : eMap.entrySet()) {
+        for (Map.Entry<?, ?> e : map.entrySet()) {
             sb.append("\n");
             sb.append(e.getKey().toString());
             sb.append("\t");
