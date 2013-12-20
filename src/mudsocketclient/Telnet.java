@@ -36,13 +36,13 @@ public final class Telnet implements Observer {
         String cmd = null;
         if (o instanceof RemoteConnection) {
             String line = (String) arg;
-            StatelessTriggers.parse(line);
-            commands.addAll(StatelessTriggers.getCmd());
+            Triggers.parse(line);
+            commands.addAll(Triggers.getCmd());
         }
         if (o instanceof LocalConnection) {
             commands.add((String) arg);
         }
-        StatelessTriggers.clear();
+        Triggers.clear();
         execute();
     }
 

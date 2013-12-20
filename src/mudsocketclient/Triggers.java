@@ -1,31 +1,30 @@
 package mudsocketclient;
 
-import reports.Ratio;
-import reports.Monitor;
-import reports.RegexMapBuilder;
+import state.Ratio;
+import state.Monitor;
+import state.RegexMapBuilder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StatelessTriggers {
+public class Triggers {
 
-    private static Logger log = Logger.getLogger(StatelessTriggers.class.getName());
+    private static Logger log = Logger.getLogger(Triggers.class.getName());
     private static String line = null;
     private static List<String> c = new ArrayList<>();
 
     public static void parse(String line) {
-        StatelessTriggers.line = line;
+        Triggers.line = line;
         if ((!"null".equalsIgnoreCase(line)) && (line != null)) {
             monitor();
             fighting();
             killed();
+            drainBlood();
         } else {
-            StatelessTriggers.line = null;
+            Triggers.line = null;
         }
     }
 
@@ -58,12 +57,18 @@ public class StatelessTriggers {
     private static void killed() {
         if (line.contains("You killed")) {
             c.add("draw from " + both(true));
-            c.add("transfuse");
+//            c.add("transfuse");
             c.add("process corpse");
             c.add("get all");
             c.add("monitor");
             c.add("glance");
             c.add("monitor");
+        }
+    }
+
+    private static void drainBlood() {
+        if (line.contains("blood are contaminated")) {
+            c.add("drain");
         }
     }
 
