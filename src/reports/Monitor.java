@@ -1,6 +1,7 @@
 package reports;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,8 +10,9 @@ import java.util.logging.Logger;
 public class Monitor {
 
     private static Logger log = Logger.getLogger(Monitor.class.getName());
-    private Map<Attribs, Ratio> mapOfAttributes = new HashMap<>();
     private String enemy = null;
+    Map<String, String> stringMap = new HashMap<>();
+    EnumMap<ATTRIBUTES, String> eMap = new EnumMap<>(ATTRIBUTES.class);
 
     private Monitor() {
     }
@@ -19,24 +21,21 @@ public class Monitor {
         init(mapStringToRatio);
     }
 
+    //Attribs attr = Attribs.valueOf(stringValue.toUpperCase());
     private void init(Map<String, Ratio> mapStringToRatio) {
-        SimpleEntry<Attribs, Ratio> attribsEntry = null;
+        SimpleEntry<ATTRIBUTES, Ratio> attribsEntry = null;
+        Ratio r;
         for (Entry<String, Ratio> stringEntry : mapStringToRatio.entrySet()) {
-            attribsEntry = null;
-            attribsEntry = convertToEnumEntry(stringEntry);
-            if (attribsEntry != null) {
-                mapOfAttributes.put(attribsEntry.getKey(), attribsEntry.getValue());
-            } else {
-                enemy = stringEntry.getKey();     //assumes key is enemy value
-                mapOfAttributes.put(Attribs.ENEMY, stringEntry.getValue());
-            }
+            ATTRIBUTES attribute = ATTRIBUTES.valueOf(stringEntry.getKey().toUpperCase());
+            r = stringEntry.getValue();
+            eMap.put(attribute, enemy);
         }
     }
 
-    private SimpleEntry<Attribs, Ratio> convertToEnumEntry(Entry<String, Ratio> stringEntry) {
+    private SimpleEntry<ATTRIBUTES, Ratio> convertToEnumEntry(Entry<String, Ratio> stringEntry) {
         Ratio ratio = stringEntry.getValue();
-        SimpleEntry<Attribs, Ratio> attribEntry = null;
-        for (Attribs attribute : Attribs.values()) {
+        SimpleEntry<ATTRIBUTES, Ratio> attribEntry = null;
+        for (ATTRIBUTES attribute : ATTRIBUTES.values()) {
             if (stringEntry.getKey().equalsIgnoreCase(attribute.name())) {
                 attribEntry = new HashMap.SimpleEntry<>(attribute, ratio);
             }
@@ -48,9 +47,10 @@ public class Monitor {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("\nfighting\t\t" + enemy + "\n");
-        for (Map.Entry<Attribs, Ratio> e : mapOfAttributes.entrySet()) {
+
+        for (Map.Entry<?, ?> e : eMap.entrySet()) {
             sb.append("\n");
-            sb.append(e.getKey().name());
+            sb.append(e.getKey().toString());
             sb.append("\t");
             sb.append(e.getValue().toString());
         }

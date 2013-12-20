@@ -1,6 +1,6 @@
 package reports;
 
-public enum Attribs {
+public enum ATTRIBUTES {
 
     ADRENALINE, BERSERK, CP, ENDORPHINE,ENEMY, HP
 }
